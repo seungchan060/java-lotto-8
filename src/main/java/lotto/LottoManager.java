@@ -12,9 +12,16 @@ public class LottoManager {
         List<Lotto> tickets = new ArrayList<>(count);
 
         for (int i = 0; i < count; i++) {
-
+            tickets.add(generateOneLotto());
         }
         return tickets;
     }
 
+    private Lotto generateOneLotto() {
+        List<Integer> numbers = Randoms.pickUniqueNumbersInRange(1, 45, 6)
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
+        return new Lotto(numbers);
+    }
 }
