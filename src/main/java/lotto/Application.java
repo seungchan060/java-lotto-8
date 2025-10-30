@@ -8,13 +8,23 @@ public class Application {
         OutputView outputView = new OutputView();
         LottoManager manager = new LottoManager();
 
-        String raw = inputView.readPurchaseAmount();
-        int purchaseAmount = LottoValidator.validatePurchaseAmount(raw);
+        int purchaseAmount = readValidPurchaseAmount(inputView);
 
         List<Lotto> purchasedLottos = manager.buyLottos(purchaseAmount);
 
         outputView.printPurchasedCount(purchasedLottos.size());
         outputView.printLottos(purchasedLottos);
 
+    }
+
+    private static int readValidPurchaseAmount(InputView inputView) {
+        while (true) {
+            try {
+                String raw = inputView.readPurchaseAmount();
+                return LottoValidator.validatePurchaseAmount(raw);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }
