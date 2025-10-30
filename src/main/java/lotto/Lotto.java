@@ -1,6 +1,6 @@
 package lotto;
 
-import java.util.List;
+import java.util.*;
 
 public class Lotto {
     private final List<Integer> numbers;
@@ -16,5 +16,9 @@ public class Lotto {
         }
     }
 
-    // TODO: 추가 기능 구현
+    public List<Integer> sortedNumbers() {
+        List<Integer> copy = new ArrayList<>(numbers);
+        Collections.sort(copy);
+        return Collections.unmodifiableList(copy);
+    }
 }
