@@ -15,6 +15,8 @@ public class Application {
         outputView.printPurchasedCount(purchasedLottos.size());
         outputView.printLottos(purchasedLottos);
 
+        List<Integer> winningNumbers = readValidWinningNumbers(inputView);
+
     }
 
     private static int readValidPurchaseAmount(InputView inputView) {
@@ -22,6 +24,17 @@ public class Application {
             try {
                 String raw = inputView.readPurchaseAmount();
                 return LottoValidator.validatePurchaseAmount(raw);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private static List<Integer> readValidWinningNumbers(InputView inputView) {
+        while (true) {
+            try {
+                String raw = inputView.readWinningNumbers();
+                return LottoValidator.validateWinningNumbers(raw);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
