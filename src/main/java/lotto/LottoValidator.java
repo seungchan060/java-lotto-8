@@ -25,6 +25,14 @@ public class LottoValidator {
         return nums;
     }
 
+    public static int validateBonusNumber(String raw, List<Integer> winningNumbers) {
+        if (raw == null || raw.trim().isEmpty()) throw new IllegalArgumentException("[ERROR] 보너스 번호는 비어 있을 수 없습니다.");
+        int bonus = parseInt(raw, "[ERROR] 보너스 번호는 정수여야 합니다.");
+        if (bonus < 1 || bonus > 45) throw new IllegalArgumentException("[ERROR] 보너스 번호는 1부터 45 사이여야 합니다.");
+        if (winningNumbers.contains(bonus)) throw new IllegalArgumentException("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
+        return bonus;
+    }
+
     private static int parseInt(String s, String errorMsg) {
         try { return Integer.parseInt(s.trim()); }
         catch (NumberFormatException e) { throw new IllegalArgumentException(errorMsg); }
