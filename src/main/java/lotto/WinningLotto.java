@@ -24,4 +24,13 @@ public class WinningLotto {
         if (set.contains(bonus)) throw new IllegalArgumentException("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
     }
 
+    // 비교용 행동 메서드
+    public boolean contains(int n) {
+        return numbers.contains(n);
+    }
+
+    public boolean isBonus(int n) {
+        return bonus == n;
+    }
+
 }
