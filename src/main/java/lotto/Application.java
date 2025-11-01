@@ -22,7 +22,7 @@ public class Application {
         WinningLotto winning = new WinningLotto(winningNumbers, bonusNumber);
 
         Map<Rank, Integer> stats = manager.judge(purchasedLottos, winning);
-
+        outputView.printStatistics(stats);
     }
 
     private static int readValidPurchaseAmount(InputView inputView) {
