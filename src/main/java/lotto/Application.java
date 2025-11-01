@@ -23,6 +23,9 @@ public class Application {
 
         Map<Rank, Integer> stats = manager.judge(purchasedLottos, winning);
         outputView.printStatistics(stats);
+
+        double yieldPercent = manager.calculateYield(stats, purchaseAmount);
+        outputView.printYield(yieldPercent);
     }
 
     private static int readValidPurchaseAmount(InputView inputView) {
