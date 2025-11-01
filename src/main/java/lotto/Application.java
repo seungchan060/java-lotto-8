@@ -1,6 +1,7 @@
 package lotto;
 
 import java.util.List;
+import java.util.Map;
 
 public class Application {
     public static void main(String[] args) {
@@ -17,6 +18,10 @@ public class Application {
 
         List<Integer> winningNumbers = readValidWinningNumbers(inputView);
         int bonusNumber = readValidBonusNumber(inputView, winningNumbers);
+
+        WinningLotto winning = new WinningLotto(winningNumbers, bonusNumber);
+
+        Map<Rank, Integer> stats = manager.judge(purchasedLottos, winning);
 
     }
 
