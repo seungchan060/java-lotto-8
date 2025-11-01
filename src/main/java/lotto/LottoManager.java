@@ -44,4 +44,17 @@ public class LottoManager {
         }
         return stats;
     }
+
+    public double calculateYield(Map<Rank, Integer> stats, int purchaseAmount) {
+        long totalPrize = 0L;
+        for (Map.Entry<Rank, Integer> e : stats.entrySet()) {
+            totalPrize += e.getKey().prize() * e.getValue();
+        }
+
+        BigDecimal rate = BigDecimal.valueOf(totalPrize)
+                .divide(BigDecimal.valueOf(purchaseAmount), 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(1, RoundingMode.HALF_UP);
+        return rate.doubleValue();
+    }
 }
