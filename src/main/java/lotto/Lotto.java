@@ -23,4 +23,15 @@ public class Lotto {
         Collections.sort(copy);
         return Collections.unmodifiableList(copy);
     }
+
+    public Rank determineRank(WinningLotto winning) {
+        int matchCount = 0;
+        for (int n : numbers) {
+            if (winning.contains(n)) {
+                matchCount++;
+            }
+        }
+        boolean bonusMatched = numbers.stream().anyMatch(winning::isBonus);
+        return Rank.from(matchCount, bonusMatched);
+    }
 }
