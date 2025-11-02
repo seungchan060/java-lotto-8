@@ -54,6 +54,52 @@ class ApplicationTest extends NsTest {
         });
     }
 
+    void 재입력_구입금액_잘못_후_정상() {
+        assertSimpleTest(() -> {
+            run("1500", "2000", "1,2,3,4,5,6", "7");
+            assertThat(output()).contains(ERROR_MESSAGE);
+            assertThat(output()).contains("2개를 구매했습니다.");
+        });
+    }
+
+    @Test
+    void 재입력_당첨번호_개수부족_후_정상() {
+        assertRandomUniqueNumbersInRangeTest(
+                () -> {
+                    run("1000", "1,2,3,4,5", "1,2,3,4,5,6", "7");
+                    assertThat(output()).contains(ERROR_MESSAGE);
+                    assertThat(output()).contains("1개를 구매했습니다.");
+                },
+                List.of(1, 2, 3, 4, 5, 6)
+        );
+    }
+
+    @Test
+    void 재입력_보너스_중복_후_정상() {
+        assertRandomUniqueNumbersInRangeTest(
+                () -> {
+                    run("1000", "1,2,3,4,5,6", "6", "7");
+                    assertThat(output()).contains(ERROR_MESSAGE);
+                    assertThat(output()).contains("당첨 통계");
+                },
+                List.of(1, 2, 3, 4, 5, 6)
+        );
+    }
+
+    @Test
+    void 기능_2등_보너스일치() {
+        assertRandomUniqueNumbersInRangeTest(
+                () -> {
+                    run("1000", "1,2,3,4,5,6", "7"); // 티켓 [1,2,3,4,5,7]
+                    assertThat(output()).contains(
+                            "1개를 구매했습니다.",
+                            "5개 일치, 보너스 볼 일치 (30,000,000원) - 1개"
+                    );
+                },
+                List.of(1, 2, 3, 4, 5, 7)
+        );
+    }
+
     @Override
     public void runMain() {
         Application.main(new String[]{});
