@@ -1,4 +1,4 @@
-# 2주차 미션 - 로또
+# 3주차 미션 - 로또
 
 ## 기능 목록
 ### 입력
@@ -62,14 +62,80 @@
     - 천 단위 콤마, 퍼센트 소수점 **한 자리**
 
 ## 구현 순서
+1. **프로젝트 구조 설계**
+    - 입력/출력, 도메인, 로직(서비스) 계층 분리
+    - `Application`에서 전체 흐름만 제어하도록 구성
+2. **구입 금액 입력 및 검증**
+    - `InputView`에서 문자열 입력
+    - `LottoValidator.validatePurchaseAmount()`에서 정수/범위/단위 검증
+    - 잘못된 입력 시 `IllegalArgumentException` 발생 → `Application`에서 재입력 유도
+3. **로또 자동 발급**
+    - `LottoManager.buyLottos()`에서 구입 금액 기반 로또 개수 산출
+    - `Randoms.pickUniqueNumbersInRange()`로 중복 없는 6개 번호 생성
+    - `Lotto` 객체 생성 및 번호 보관
+4. **구입한 로또 리스트 출력**
+    - `OutputView.printPurchasedCount()` 및 `printLottos()`에서 출력 형식
+5. **당첨 번호 / 보너스 번호 입력 및 검증**
+    - `InputView`에서 입력
+    - `LottoValidator.validateWinningNumbers()`에서 개수/범위/중복 검증
+    - `LottoValidator.validateBonusNumber()`에서 범위/중복 검증
+    - 입력 실패 시 동일 위치에서 재입력 처리
+6. **도메인 모델 구축**
+    - `WinningLotto`가 당첨 번호와 보너스 번호 보관
+    - 비교 기능: `contains()`, `isBonus()`
+7. **당첨 로직 및 등수 계산**
+    - `Rank` enum으로 등급(1~5, 미당첨) 정의 및 상금 포함
+    - `Lotto.determineRank()`에서 일치 개수 및 보너스 여부 계산
+    - `LottoManager.judge()`에서 전체 로또 등수별 통계 집계
+8. **수익률 계산**
+    - `LottoManager.calculateYield()`에서 총 상금 ÷ 구입금액 계산
+    - 퍼센트 변환 및 소수점 한 자리까지 반올림
+9. **당첨 통계 및 수익률 출력**
+    - `OutputView.printStatistics()`, `printYield()`에서 형식화된 출력 처리
+10. **단위 테스트 작성 및 검증**
+- `LottoTest`, `LottoValidatorTest`, `WinningLottoTest`, `RankTest`, `LottoManagerTest` 작성
+- `ApplicationTest`로 전체 흐름 통합 테스트
+- 모든 테스트 통과(Green)
 
 ## 주요 구현
+| 역할 | 클래스 | 주요 responsibility |
+| --- | --- | --- |
+| 애플리케이션 흐름 제어 | `Application` | 입력 → 검증 → 발급 → 당첨 계산 → 출력 전체 과정 조율 |
+| 입력 처리 | `InputView` | 사용자 입력 요청 및 입력값 반환 |
+| 출력 처리 | `OutputView` | 구매 결과, 당첨 통계, 수익률 출력 |
+| 검증 로직 | `LottoValidator` | 문자열 → 숫자 변환 / 범위 / 중복 / 개수 / 재입력 예외 처리 |
+| 로또 티켓 | `Lotto` | 번호 보관(불변), `WinningLotto` 비교 → 등수 반환 |
+| 당첨 정보 | `WinningLotto` | 당첨 번호 + 보너스 번호 보관 및 비교 지원 |
+| 비즈니스 로직 | `LottoManager` | 로또 발급, 당첨 통계 계산, 수익률 계산 |
+| 등수 정책 | `Rank` (Enum) | 일치 개수 및 보너스 여부를 기반으로 상금 및 등급 정의 |
 
 ## 실행 결과
+<img width="356" height="622" alt="스크린샷 2025-11-02 오후 4 44 55" src="https://github.com/user-attachments/assets/fcfa0183-c429-4857-939c-c4bbf51ebcd4" />
 
 ## 단위 테스트 리스트
+### LottoManager
+- `judge`집계와 `calculateYield` 수익률
+### WinningLotto
+- 유효성 검증
+### Rank
+- 매핑 검증
+### Application
+- 예외 테스트
+- 재입력 보너스 중복 후 정상인지
+- 기능 테스트
+- 2등 보너스 일치 여부
+- 재입력 당첨번호 개수부족 후 정상인지
+### LottoValidator
+- 당첩번호 검증
+- 보너스 번호 검증
+- 구입금액 검증
+### Lotto
+- 로또 번호의 개수가 6개가 넘어가면 예외 발생
+- 로또 번호에 중복된 숫자가 있으면 예외 발생
+- 등수 계산: 5개+보너스=2등, 5개=3등
 
 ## 단위 테스트 결과
+<img width="603" height="427" alt="스크린샷 2025-11-02 오후 4 36 21" src="https://github.com/user-attachments/assets/e9e240d1-6b21-401f-a7a9-5331c082886f" />
 
 ## 기능 요구 사항
 간단한 로또 발매기를 구현한다.
